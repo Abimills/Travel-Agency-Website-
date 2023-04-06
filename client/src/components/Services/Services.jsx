@@ -17,7 +17,7 @@ const Services = () => {
   const handleClickCreate = () => {
     user === null
       ? navigate("/register")
-      : alert.success("you are already registered");
+      : alert.success("you already have an account");
   };
   return (
     <div className="all-our-mission">

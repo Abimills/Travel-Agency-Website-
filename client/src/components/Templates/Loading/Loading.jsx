@@ -1,21 +1,14 @@
 import React from "react";
-import { Blocks } from "react-loader-spinner";
+import ClipLoader from "react-spinners/ClipLoader";
 import "./Loading.css";
 
 const Loading = () => {
   return (
     <div className="loading">
-      <Blocks
-        height={120}
-        width={120}
-        color="#ffa500"
-        wrapperStyle={{}}
-        wrapperClass=""
-        visible={true}
-        ariaLabel="oval-loading"
-        secondaryColor="#ffa500"
-        strokeWidth={2}
-        strokeWidthSecondary={2}
+      <ClipLoader
+        color={"white"}
+        size={80}
+        aria-label="Loading Spinner"
       />
     </div>
   );

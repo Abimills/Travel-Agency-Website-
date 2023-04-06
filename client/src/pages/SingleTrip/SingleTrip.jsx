@@ -14,9 +14,10 @@ import Loading from "../../components/Templates/Loading/Loading";
 import CommentContainer from "./CommentContainer";
 
 const SingleTrip = () => {
+  // all useStates
   const [data, setData] = useState({});
   const [likedBy, setLikedBy] = useState([]);
-  const [clicked, setClicked] = useState();
+  const [isClicked, setIsClicked] = useState();
   const [reviewPhotos, setReviewPhotos] = useState("");
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -24,23 +25,22 @@ const SingleTrip = () => {
   const { id } = useParams();
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+  const detail = data?.result;
 
+  // fetching specific review using id
   const { performFetch, isLoading } = useFetch(`/review/find/${id}`, (data) => {
     setData(data);
     setComments(data?.result.comments);
     setReviewPhotos(data?.result.photo);
     setLikedBy(data.result.likedBy);
   });
-
   useEffect(() => {
     performFetch();
   }, [id]);
 
-  const detail = data?.result;
-
   useEffect(async () => {
     if (user !== null && detail) {
-      likedBy.includes(user.userId) ? setClicked(true) : setClicked(false);
+      likedBy.includes(user.userId) ? setIsClicked(true) : setIsClicked(false);
 
       try {
         await api.likedBy(detail._id, { likedBy: likedBy });
@@ -50,21 +50,22 @@ const SingleTrip = () => {
     }
   }, [likedBy]);
 
+  // handle user like btn functionality in the frontend
   const handleClickLike = () => {
     if (user === null) {
       navigate("/login");
     } else {
       if (!likedBy.includes(user.userId)) {
         setLikedBy((prev) => [...prev, user.userId]);
-        setClicked(true);
+        setIsClicked(true);
       } else {
         setLikedBy(likedBy.filter((e) => e !== user.userId));
-        setClicked(false);
+        setIsClicked(false);
       }
     }
   };
 
-  // logInfo(comments);
+  // handle comments 
   const sendInfo = async () => {
     if (user === null) {
       navigate("/login");
@@ -88,7 +89,7 @@ const SingleTrip = () => {
             <img src={reviewPhotos} alt="" />
             <div className="circle-like-btn">
               <div className="like-container">
-                {clicked ? (
+                {isClicked ? (
                   <AiFillLike onClick={handleClickLike} className="liked-btn" />
                 ) : (
                   <AiOutlineLike

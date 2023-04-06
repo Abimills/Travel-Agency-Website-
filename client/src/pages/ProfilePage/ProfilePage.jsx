@@ -8,7 +8,7 @@ import { MdAlternateEmail } from "react-icons/md";
 import { IoPencil } from "react-icons/io5";
 import Card from "../../components/Card/Card";
 import "./profile.css";
-import { logError } from "../../../../server/src/util/logging";
+import { logError, logInfo } from "../../../../server/src/util/logging";
 import { LoginContext } from "../../components/Context/LoginContext";
 import AccordionProfile from "../../components/Templates/AccordionProfile/AccordionProfile.jsx";
 import useFetch from "../../hooks/useFetch";
@@ -20,8 +20,12 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Templates/Loading/Loading";
 
 const ProfilePage = () => {
+  // get data from localStorage and context api
   const users = JSON.parse(localStorage.getItem("user"));
+  const token = JSON.parse(localStorage.getItem("token"));
   const { setUserName, dispatch } = useContext(LoginContext);
+
+  // all useState initiations
   const [person, setPerson] = useState();
   const [data, setData] = useState([]);
   const [userReviews, setUserReviews] = useState([]);
@@ -36,13 +40,13 @@ const ProfilePage = () => {
   const [showFavorites, setShowFavorites] = useState(true);
   const [showReview, setShowReview] = useState(true);
   const [loading, setLoading] = useState(null);
-  const token = JSON.parse(localStorage.getItem("token"));
+
+
   const id = users.userId;
   const navigate = useNavigate();
   const alert = useAlert();
 
   //handle and convert it in base 64
-
   const setFileToBase = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -55,7 +59,7 @@ const ProfilePage = () => {
     setFileToBase(file);
     setFileName(file?.name);
   };
-
+// make request to backend to add photo to user profile
   const handleSubmitUserImage = async () => {
     if (users !== null) {
       setLoading(true);
@@ -81,6 +85,7 @@ const ProfilePage = () => {
     }
   };
 
+  // constantly check if any field is changed and then change the frontend to reflect any change !!!!!!!!!!
   useEffect(() => {
     if (name || surname || email || introduction) {
       const users = JSON.parse(localStorage.getItem("user"));
@@ -92,6 +97,7 @@ const ProfilePage = () => {
       localStorage.setItem("user", JSON.stringify(users));
     }
   }, [person]);
+  // constantly wait for the user if they change profile image to reflect it in front end!!!!!
   useEffect(() => {
     if (hookData) {
       const users = JSON.parse(localStorage.getItem("user"));
@@ -99,6 +105,8 @@ const ProfilePage = () => {
       localStorage.setItem("user", JSON.stringify(users));
     }
   }, [hookData]);
+
+  // handles backend changing user personal info like [name,surname,email,introduction]!!!!!!!!!!
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -128,6 +136,7 @@ const ProfilePage = () => {
       }
     }
   };
+  // fetches user reviews
   const fetchUserReviews = async () => {
     if (users !== null) {
       setLoading(true);
@@ -149,6 +158,7 @@ const ProfilePage = () => {
       setLoading(false);
     }
   };
+  // fetches all of the favorite reviews of user !!!!!!!
   const fetchData = async () => {
     if (users !== null) {
       setLoading(true);
@@ -169,12 +179,16 @@ const ProfilePage = () => {
       setLoading(false);
     }
   };
+    const userInfo = JSON.parse(localStorage.getItem("user"));
+
   useEffect(() => {
     fetchData();
     fetchUserReviews();
   }, []);
 
   const { performFetch } = useFetch(`/user/query?_id=${id}`);
+
+  // deletes user account from data base
   const handleDelete = () => {
     performFetch({
       method: "DELETE",
@@ -185,7 +199,7 @@ const ProfilePage = () => {
     dispatch({ type: "LOGOUT" });
     navigate("/");
   };
-
+// alert for delete account
   const submitAlert = () => {
     confirmAlert({
       message: "Are you sure to delete your account?",

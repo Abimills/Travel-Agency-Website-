@@ -77,29 +77,6 @@ const HomeAboutUs = () => {
       </div>
       <div className="contact-us-container">
         <ContactForm />
-        {/* <form>
-          <div className="name-email-about-container">
-            <input
-              type="text"
-              className="contact-us-input"
-              placeholder="Name"
-            />
-            <input
-              type="text"
-              className="contact-us-input"
-              placeholder="Email"
-            />
-          </div>
-          <input
-            type="text"
-            className="contact-us-input"
-            placeholder="Subject"
-          />
-          <textarea
-            className="contact-us-input"
-            placeholder="write you comments here"
-          ></textarea>
-        </form> */}
       </div>
     </div>
   );

@@ -189,6 +189,6 @@ export const reviewQueryByAddress = async (req, res) => {
       res.status(400).json({ success: false, message: "There is no records" });
     }
   } catch (error) {
-    res.status(400).json({ success: false });
+    res.status(400).json({ success: false, err: error });
   }
 };

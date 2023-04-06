@@ -17,7 +17,6 @@ const BestCities = () => {
       <div className="title-home-container">
         <h1 className="top-destination">Best Cities</h1>
       </div>
-      {/* <div className="underline " style={{ marginBottom: "2rem" }}></div> */}
       <div className="best-cities-container">
         <div className="best-city">
           {topCities?.slice(0, 10).map((singleTrip) => {

@@ -4,21 +4,23 @@ import "./placeSearchBar.css";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import { BiSearch } from "react-icons/bi";
-import { logInfo } from "../../../../../server/src/util/logging";
 
 const PlaceSearchBar = () => {
   const [inputPlace, setInputPlace] = useState("");
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const [showEmptyErr, setShowEmptyErr] = useState(false);
+  const navigate = useNavigate();
 
   const place = inputPlace.label;
   const { performFetch } = useFetch("/review/reviewbyAddress", (data) => {
     setData(data);
-    navigate("/resultPage", { state: { data, place } });
+    navigate(
+      "/resultPage",
+      { state : { data, place } },
+      window.scrollTo(0, 150)
+    );
   });
-  logInfo(data);
 
-  const navigate = useNavigate();
   const handleSearch = async () => {
     if (!inputPlace) {
       setShowEmptyErr(true);

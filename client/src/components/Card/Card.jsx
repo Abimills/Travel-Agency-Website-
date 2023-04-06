@@ -7,47 +7,49 @@ import { AiFillHeart } from "react-icons/ai";
 import { AiOutlineHeart } from "react-icons/ai";
 import { LoginContext } from "../Context/LoginContext";
 
-const Card = ({ img, title, userName, id, icon, date }) => {
+const Card = ({ img, title, id, icon, date }) => {
   const { user } = useContext(LoginContext);
   const navigate = useNavigate();
   const [favored, setFavored] = useState(false);
+  const [newFavoredPlaces, setNewFavoredPlaces] = useState([]);
   const reviewId = id;
   const userId = user && user.userId;
 
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("user"));
-    users && setFavored(users.fav.includes(id));
+    users && setFavored(users.fav?.includes(id));
   }, [id]);
+  useEffect(() => {
+    const users = JSON.parse(localStorage.getItem("user"));
+    if (newFavoredPlaces.fav?.length >= 0) {
+      users.fav = newFavoredPlaces?.fav;
+      localStorage.setItem("user", JSON.stringify(users));
+    }
+    return users;
+  }, [newFavoredPlaces]);
 
-  const handleAddFavbtn = () => {
+  const handleFavoriteButton = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user === null) {
       navigate("/login");
     }
-    setFavored(!favored);
-    if (favored) {
-      user && user.fav.splice(user.fav.indexOf(reviewId), 1);
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      user && user.fav.push(reviewId);
-      localStorage.setItem("user", JSON.stringify(user));
-    }
-  };
-
-  const fetchData = async () => {
-    const users = JSON.parse(localStorage.getItem("user"));
-
-    if (users !== null) {
-      await fetch(`${process.env.BASE_SERVER_URL}/api/user/me/like`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reviewId,
-          userId,
-        }),
-      });
+    if (user) {
+      setFavored(!favored);
+      const res = await fetch(
+        `${process.env.BASE_SERVER_URL}/api/user/me/like`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            reviewId,
+            userId,
+          }),
+        }
+      );
+      const result = await res.json();
+      setNewFavoredPlaces(result);
     }
   };
 
@@ -57,21 +59,23 @@ const Card = ({ img, title, userName, id, icon, date }) => {
         {favored ? (
           <AiFillHeart
             className="favored-icon "
-            onClick={() => (fetchData(), handleAddFavbtn())}
+            onClick={handleFavoriteButton}
           />
         ) : (
           <AiOutlineHeart
             className="favored-icon un-liked-icon"
-            onClick={() => (fetchData(), handleAddFavbtn())}
+            onClick={handleFavoriteButton}
           />
         )}
         <img src={img} alt="card-image" />
+
         <div className="info-box">
-          <span className="placeName">
-            {<ImLocation />}
-            {title}
-          </span>
-          <p className="userName">Traveler Name : {userName}</p>
+            <span className="placeName">
+              <ImLocation />
+          
+              {title}
+         
+            </span>
           <div className="star-header-container">
             <div className="stars">
               <div className="star-icon">{icon}</div>

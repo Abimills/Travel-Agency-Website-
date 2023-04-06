@@ -10,6 +10,7 @@ const ResultPage = () => {
   const location = useLocation();
   const allData = location.state.data.reviews;
   const visitedPlace = location.state.place.split(",")[0];
+ 
   const { user } = useContext(LoginContext);
   const data = allData.sort((a, b) => b.score - a.score);
   return (
@@ -34,10 +35,10 @@ const ResultPage = () => {
           ) : (
             <div className="reviewOffer">
               <h1>
-                There is no review about <br></br>
+                There is no review about <br />
                 <span>{visitedPlace}</span>
                 <br></br>
-                Share your experience and create first review!
+                Share your experience and <br /> be the one to create a first review!
               </h1>
               {user ? (
                 <Link to="/createReview">
