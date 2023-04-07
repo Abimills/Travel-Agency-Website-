@@ -16,7 +16,7 @@ const Services = () => {
   const alert = useAlert();
   const handleClickCreate = () => {
     user === null
-      ? navigate("/register")
+      ? navigate("/register", window.scrollTo(0, 0))
       : alert.success("you already have an account");
   };
   return (

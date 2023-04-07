@@ -8,13 +8,15 @@ import { useAlert } from "react-alert";
 
 const ForgotPassword = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const token = location.search.split("=")[1];
+  const alert = useAlert();
+
+  // all useState
   const [values, setValues] = useState({ password: "", passwordAgain: "" });
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(false);
   const [validLink, setValidLink] = useState(false);
-  const token = location.search.split("=")[1];
-  const alert = useAlert();
-  const navigate = useNavigate();
 
   const userValid = async () => {
     const res = await fetch(
@@ -40,9 +42,6 @@ const ForgotPassword = () => {
   const setVal = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-  const value = {
-    password: values.password,
-  };
 
   const sendPassword = async (e) => {
     e.preventDefault();
@@ -60,7 +59,7 @@ const ForgotPassword = () => {
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
-          body: JSON.stringify(value),
+          body: JSON.stringify({ password: values.password }),
         }
       );
 
@@ -69,7 +68,7 @@ const ForgotPassword = () => {
       if (data.success == true) {
         setMessage(true);
         setTimeout(() => {
-          navigate("/login");
+          navigate("/login", window.scrollTo(0, 0));
         }, 2000);
       } else {
         alert.error("ERROR-Check Your Information");
@@ -99,7 +98,7 @@ const ForgotPassword = () => {
         <div className="reset-page">
           <div className="reset-container">
             <div className="reset-box">
-              {message ? (
+              {message && (
                 <p
                   style={{
                     color: "green",
@@ -109,8 +108,6 @@ const ForgotPassword = () => {
                 >
                   Password is successfully updated
                 </p>
-              ) : (
-                ""
               )}
               <h2 style={{ textAlign: "center" }}>Enter Your NEW Password!</h2>
               <form className="loginInputs">
@@ -132,7 +129,7 @@ const ForgotPassword = () => {
                 {errors.passwordAgain && (
                   <p style={{ textAlign: "center" }}>{errors.passwordAgain}</p>
                 )}
-                <Button onClick={sendPassword} name="Sent" />
+                <Button onClick={sendPassword} name="Submit" />
               </form>
               <p style={{ textAlign: "center" }}>
                 <NavLink to="/">Home</NavLink>

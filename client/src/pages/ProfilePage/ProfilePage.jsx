@@ -41,25 +41,21 @@ const ProfilePage = () => {
   const [showReview, setShowReview] = useState(true);
   const [loading, setLoading] = useState(null);
 
-
   const id = users.userId;
   const navigate = useNavigate();
   const alert = useAlert();
 
   //handle and convert it in base 64
-  const setFileToBase = (file) => {
+  const handleImage = (e) => {
+    const file = e.target.files[0];
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setValue(reader.result);
     };
-  };
-  const handleImage = (e) => {
-    const file = e.target.files[0];
-    setFileToBase(file);
     setFileName(file?.name);
   };
-// make request to backend to add photo to user profile
+  // make request to backend to add photo to user profile
   const handleSubmitUserImage = async () => {
     if (users !== null) {
       setLoading(true);
@@ -78,6 +74,7 @@ const ProfilePage = () => {
         );
         const newUserPhoto = await res.json();
         setHookdata(newUserPhoto);
+        setFileName("");
       } catch (error) {
         logError(error);
       }
@@ -85,7 +82,8 @@ const ProfilePage = () => {
     }
   };
 
-  // constantly check if any field is changed and then change the frontend to reflect any change !!!!!!!!!!
+  // constantly check if any field is changed
+  // and then change the frontend to reflect any change !!!!!!!!!!
   useEffect(() => {
     if (name || surname || email || introduction) {
       const users = JSON.parse(localStorage.getItem("user"));
@@ -97,7 +95,8 @@ const ProfilePage = () => {
       localStorage.setItem("user", JSON.stringify(users));
     }
   }, [person]);
-  // constantly wait for the user if they change profile image to reflect it in front end!!!!!
+  // constantly wait for the user if they change profile image
+  //  to reflect it in front end!!!!!
   useEffect(() => {
     if (hookData) {
       const users = JSON.parse(localStorage.getItem("user"));
@@ -106,7 +105,8 @@ const ProfilePage = () => {
     }
   }, [hookData]);
 
-  // handles backend changing user personal info like [name,surname,email,introduction]!!!!!!!!!!
+  // handles backend changing user personal info
+  //  like [name,surname,email,introduction]!!!!!!!!!!
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -179,7 +179,7 @@ const ProfilePage = () => {
       setLoading(false);
     }
   };
-    const userInfo = JSON.parse(localStorage.getItem("user"));
+  const userInfo = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     fetchData();
@@ -197,9 +197,9 @@ const ProfilePage = () => {
       },
     });
     dispatch({ type: "LOGOUT" });
-    navigate("/");
+    navigate("/".window.scrollTo(0, 0));
   };
-// alert for delete account
+  // alert for delete account
   const submitAlert = () => {
     confirmAlert({
       message: "Are you sure to delete your account?",
@@ -323,7 +323,7 @@ const ProfilePage = () => {
                 <button
                   type="submit"
                   onClick={() => {
-                    handleSubmitUserImage(), setFileName("");
+                    handleSubmitUserImage();
                   }}
                   className="submit-image-btn"
                 >
@@ -349,7 +349,6 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-      {/* <hr /> */}
       <div className="profile-reviews-favs-container">
         <div className="profile-page-fav-trips">
           <div className="review-btn-container">
@@ -368,7 +367,6 @@ const ProfilePage = () => {
               </span>
             </button>
           </div>
-          {/* <div className="underlined"></div> */}
           {showReview && <FavoritesReviews data={userReviews} />}
         </div>
         <hr />

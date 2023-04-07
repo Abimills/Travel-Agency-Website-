@@ -62,7 +62,7 @@ const ResetPassword = () => {
                 textAlign: "center",
               }}
             >
-              If we know this e-mail address we have sent an e-mail with a link
+              Link is sent to your email , Please check it!
             </p>
           ) : (
             ""

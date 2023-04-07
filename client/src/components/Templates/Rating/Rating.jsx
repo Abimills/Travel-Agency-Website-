@@ -13,7 +13,7 @@ const labels = {
 };
 
 function getLabelText(value) {
-  return `${value} Star${value !== 1 ? "s" : ""}, ${labels[value]}`;
+  return `${value} Star${value > 1 && "s"}, ${labels[value]}`;
 }
 
 // eslint-disable-next-line react/prop-types

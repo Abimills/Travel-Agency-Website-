@@ -14,8 +14,11 @@ import api from "../../util/api";
 import Loading from "../../components/Templates/Loading/Loading";
 
 const CreateReview = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const alert = useAlert();
+
+  // all useState
   const [errors, setErrors] = useState({});
   const [type, setType] = useState(null);
   const [selectedOptions, setSelectedOptions] = useState();
@@ -25,7 +28,6 @@ const CreateReview = () => {
   const [photoUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState("");
-  const user = JSON.parse(localStorage.getItem("user"));
   const [values, setValues] = useState({
     userId: user.userId,
     username: user.name,
@@ -37,6 +39,8 @@ const CreateReview = () => {
     description: "",
     photo: "",
   });
+
+  // list for dropdown select (type of trip)
   const optionList = [
     { value: "fun", label: "Fun" },
     { value: "cultural", label: "Cultural" },
@@ -48,18 +52,14 @@ const CreateReview = () => {
   //handle and convert it in base 64
   const handleImage = (e) => {
     const file = e.target.files[0];
-    setFileToBase(file);
-    setFileName(file?.name);
-  };
-
-  const setFileToBase = (file) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setImage(reader.result);
     };
+    setFileName(file?.name);
   };
-
+  // checks if visitedPlace,photo,category is true and set it
   useEffect(() => {
     if (visitedPlace)
       setValues({ ...values, ["visitedPlace"]: visitedPlace.label });
@@ -68,6 +68,7 @@ const CreateReview = () => {
       setValues({ ...values, ["category"]: type.map((each) => each.label) });
   }, [visitedPlace, type, randomPhotos, photoUrl]);
 
+  // all of the data to send to backend
   const review = {
     user: values.userId,
     userName: user.name,
@@ -80,27 +81,29 @@ const CreateReview = () => {
     photo: image ? image : values.photo,
   };
 
+  // handles input changes
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
+  // checks for errors
   useEffect(() => {
     setErrors(Validation(values));
   }, [values]);
 
+  // if user does not provide a photo / we set it ourself
   const getPhotos = async () => {
     if (visitedPlace) {
       const place = visitedPlace.label.split(",")[0];
-      if (visitedPlace) {
-        const response = await fetch(
-          `https://api.unsplash.com/search/photos?query=${place}&client_id=${process.env.REACT_APP_API_KEY_UNSPLASH}`
-        );
-        const data = await response.json();
-        const randomImg =
-          data?.results[Math.floor(Math.random() * data?.results.length)].urls
-            ?.raw;
-        setRandomPhotos(randomImg);
-      }
+
+      const response = await fetch(
+        `https://api.unsplash.com/search/photos?query=${place}&client_id=${process.env.REACT_APP_API_KEY_UNSPLASH}`
+      );
+      const data = await response.json();
+      const randomImg =
+        data?.results[Math.floor(Math.random() * data?.results.length)].urls
+          ?.raw;
+      setRandomPhotos(randomImg);
     }
   };
 
@@ -112,6 +115,7 @@ const CreateReview = () => {
     if (!photoUrl) setValues({ ...values, ["photo"]: randomPhotos });
   }, [randomPhotos]);
 
+  // handles user submitting all form data
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (
@@ -129,7 +133,7 @@ const CreateReview = () => {
           setLoading(false);
           alert.success("Successful");
           setTimeout(() => {
-            navigate(`/detail/${res.msg?._id}`);
+            navigate(`/detail/${res.msg?._id}`, window.scrollTo(0, 0));
           }, 1200);
         }
       } catch (error) {
@@ -142,6 +146,7 @@ const CreateReview = () => {
     }
   };
 
+  // handles user selecting options
   const handleSelect = (data) => {
     setSelectedOptions(data);
     setType(data);
@@ -224,7 +229,7 @@ const CreateReview = () => {
                   <label>Write A Title About Your Experience!</label>
                   <Input
                     name="title"
-                    placeholder="Title..."
+                    placeholder=" Give It A Title..."
                     handleChange={handleChange}
                   />
                   {errors.title && <p>{errors.title}</p>}

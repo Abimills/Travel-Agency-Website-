@@ -5,7 +5,6 @@ import Input from "../../components/Templates/InputField/Input";
 import Button from "../../components/Templates/Button/Button";
 import Validation from "./Validation";
 import { Link, useNavigate } from "react-router-dom";
-import { logInfo } from "../../../../server/src/util/logging";
 import { useAlert } from "react-alert";
 import api from "../../util/api";
 import Loading from "../../components/Templates/Loading/Loading";
@@ -15,6 +14,7 @@ const RegisterFrom = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  const [errors, setErrors] = useState({});
   const [values, setValues] = useState({
     name: "",
     surname: "",
@@ -22,6 +22,8 @@ const RegisterFrom = () => {
     email: "",
     passwordAgain: "",
   });
+
+  // user info to send to backend
   const user = {
     user: {
       name: values.name,
@@ -31,16 +33,16 @@ const RegisterFrom = () => {
     },
   };
 
-  const [errors, setErrors] = useState({});
-
+// handles input changes
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
+// checks for error
   useEffect(() => {
     setErrors(Validation(values));
   }, [values]);
 
+// handles registeration of  user 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (Object.keys(errors).length === 0) {
@@ -54,20 +56,18 @@ const RegisterFrom = () => {
           setLoading(true);
           const result = await api.signup(user);
           const res = await result.data;
-          logInfo(res);
+        
           if (res.success) {
             setLoading(false);
             alert.success("Successful");
             setTimeout(() => {
-              navigate("/login");
+              navigate("/login", window.scrollTo(0,0));
             }, 1200);
           } else {
             setLoading(false);
-            logInfo("registration failed");
             alert.error("ERROR-Check Your Information");
           }
         } catch (error) {
-          logInfo("registration failed");
           setLoading(false);
           alert.error("ERROR-Check Your Information");
         }

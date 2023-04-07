@@ -14,9 +14,8 @@ const SingleCity = () => {
   });
   useEffect(() => {
     performFetch();
-    return () => {};
   }, []);
-  const dbData = data?.result?.filter((trip) => trip.city === city);
+  const dbData = data?.result?.filter((trip) => trip.city?.toLowerCase() == city.toLowerCase());
   return (
     <>
       <h1 className="top-destination top-one">Cities</h1>

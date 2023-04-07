@@ -7,16 +7,14 @@ import { BiSearch } from "react-icons/bi";
 
 const PlaceSearchBar = () => {
   const [inputPlace, setInputPlace] = useState("");
-  const [data, setData] = useState([]);
   const [showEmptyErr, setShowEmptyErr] = useState(false);
   const navigate = useNavigate();
 
   const place = inputPlace.label;
   const { performFetch } = useFetch("/review/reviewbyAddress", (data) => {
-    setData(data);
     navigate(
       "/resultPage",
-      { state : { data, place } },
+      { state: { data, place } },
       window.scrollTo(0, 150)
     );
   });

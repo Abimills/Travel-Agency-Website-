@@ -2,10 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import { AiFillStar } from "react-icons/ai";
 import Card from "../../components/Card/Card";
-import { logInfo } from "../../../../server/src/util/logging";
 
 const FavoritesReviews = ({ data }) => {
-  logInfo(data);
   if (data.length < 1) {
     return (
       <div>

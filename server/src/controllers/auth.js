@@ -93,7 +93,7 @@ export const sendLink = async (req, res) => {
     if (!prevUser) {
       res.status(400).json({
         success: false,
-        msg: `Email no exist. Received: ${JSON.stringify(prevUser)}`,
+        msg: `Email does not exist. ${JSON.stringify(prevUser)}`,
       });
 
       return;
@@ -101,7 +101,6 @@ export const sendLink = async (req, res) => {
 
     const token = createToken(prevUser._id, "30m");
     const link = `https://c40-team-monday.herokuapp.com/forgotPassword/${prevUser._id}/link?token=${token}`;
-    logInfo(link);
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -118,12 +117,10 @@ export const sendLink = async (req, res) => {
       text: `This link expires in 30 minutes ${link}`,
     };
 
-    transporter.sendMail(mailOptions, function (error, info) {
+    transporter.sendMail(mailOptions, function (error) {
       if (error) {
         logError(error);
         res.status(500).json({ success: false, msg: "Unable to send email" });
-      } else {
-        logInfo("Email sent: " + info.response);
       }
     });
     res.status(201).json({

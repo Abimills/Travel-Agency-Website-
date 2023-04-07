@@ -10,27 +10,36 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 
 function Navbar() {
+  // all useStates
   const [click, setClick] = useState(false);
-  const closeMobileMenu = () => setClick(false);
-  const { user, userName } = useContext(LoginContext);
   const [login, setLogIn] = useState();
-  const handleClick = () => setClick(!click);
-  const users = JSON.parse(localStorage.getItem("user"));
   const [myName, setMyName] = useState(user?.name || users?.name);
-  const navigate = useNavigate();
 
+// data from localStorage and context api
+  const users = JSON.parse(localStorage.getItem("user"));
+  const { user, userName } = useContext(LoginContext);
+  const navigate = useNavigate();
+  
+  // handle click functions
+  const handleClick = () => setClick(!click);
+  const closeMobileMenu = () => setClick(false);
+
+  // user name checker
   useEffect(() => {
     setMyName(userName ? userName : users?.name);
   }, [users?.name, userName]);
 
+  // set user info
   useEffect(() => {
     setLogIn(user);
   }, [user]);
 
+
+  //  user logout function
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    navigate("/");
+    navigate("/",window.scrollTo(0,0));
     setLogIn(!user);
   };
   const submit = () => {

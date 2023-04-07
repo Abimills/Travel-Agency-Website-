@@ -13,42 +13,40 @@ import Loading from "../../components/Templates/Loading/Loading";
 
 const LoginPage = () => {
   const alert = useAlert();
-  // const [loading, setLoading] = useState(false);
-  const [values, setValues] = useState({
-    password: "",
-    email: "",
-  });
-  const [errors, setErrors] = useState({});
-  const { dispatch, loading } = useContext(LoginContext);
-  const value = {
-    password: values.password,
-    email: values.email,
-  };
-
   const navigate = useNavigate();
+  const { dispatch, loading } = useContext(LoginContext);
+
+  const [values, setValues] = useState({ password: "", email: "" });
+  const [errors, setErrors] = useState({});
+
+  // check for any input changes
   const setVal = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
-
+  // checks for errors
   useEffect(() => {
     setErrors(Validation(values));
   }, [values]);
 
+  //  handles when user provides their login credentials
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setErrors(Validation(value));
+    setErrors(Validation(values));
     if (Object.keys(errors).length === 0) {
-      if (value.email !== "") {
+      if (values.email) {
         dispatch({ type: "LOGIN_START" });
         try {
-          const response = await api.login(value);
-          const data = response.data;
+          const response = await api.login({
+            password: values.password,
+            email: values.email,
+          });
+          const { data } = response;
           if (data.token && data.user) {
             dispatch({ type: "LOGIN_SUCCESS", payload: data });
             alert.success("Successful");
             setTimeout(() => {
-              navigate("/");
+              navigate("/", window.scrollTo(0, 0));
             }, 1000);
           } else {
             dispatch({ type: "LOGIN_FAILURE", payload: data });
@@ -97,16 +95,16 @@ const LoginPage = () => {
                 color: "yellowgreen",
               }}
             >
-              Do not have an Account?{" "}
+              Do not have an Account?
               <NavLink to="/Register">
                 <span
                   style={{
-                    color: "white",
+                    color: "cyan",
                   }}
                 >
                   Sign Up
                 </span>
-              </NavLink>{" "}
+              </NavLink>
             </p>
             <Link to="/resetPassword">
               <h5
@@ -114,7 +112,7 @@ const LoginPage = () => {
                   textAlign: "center",
                   paddingTop: "20px",
                   textDecoration: "underline",
-                  color: "whitesmoke",
+                  color: "lightRed",
                 }}
               >
                 I forgot my password!

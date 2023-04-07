@@ -2,10 +2,8 @@
 import React from "react";
 import "./aboutPage.css";
 import CardMui from "../../components/CardMui/CardMui";
-import my from "../../assets/my.png";
-import necati from "../../assets/necati.jpeg";
-import abel from "../../assets/abel.png";
-import hikmet from "../../assets/hikmet.jpeg";
+import {team} from "../../assets/teams/teamMembers.js";
+
 import Tilt from "react-vanilla-tilt";
 
 const AboutPage = () => {
@@ -95,54 +93,28 @@ const AboutPage = () => {
           <div className="introduction">
             <h2 className="here-team">HERE IS THE TEAM</h2>
             <div className="personCards">
-              <Tilt
+              {
+                team.map((member,index) => {
+                  const {name,description,img,github,linkedIn} = member;
+                 return <div key={index}>
+             <Tilt
                 style={{ backgroundColor: "transparent" }}
                 options={{ scale: 4, max: 45 }}
-              >
+                
+                >
                 <CardMui
-                  title="Abel"
-                  description="Full Stack Web Developer"
-                  img={abel}
-                  github="https://github.com/Abimills"
-                  linkedIn="https://www.linkedin.com/in/abel-t-7660a2229/"
-                />
+                  title={name}
+                  description={description}
+                  img={img}
+                  github={github}
+                  linkedIn={linkedIn}
+                  />
               </Tilt>
-              <Tilt
-                style={{ backgroundColor: "transparent" }}
-                options={{ scale: 4, max: 45 }}
-              >
-                <CardMui
-                  title="Hikmet"
-                  description="Full Stack Web Developer"
-                  img={hikmet}
-                  github="https://github.com/hikmetdag"
-                  linkedIn="https://www.linkedin.com/in/hikmet-dag-8b6b87188/"
-                />
-              </Tilt>
-              <Tilt
-                style={{ backgroundColor: "transparent" }}
-                options={{ scale: 4, max: 45 }}
-              >
-                <CardMui
-                  title="Mustafa"
-                  description="Full Stack Web Developer"
-                  img={my}
-                  github="https://github.com/mysr3809"
-                  linkedIn="https://www.linkedin.com/in/mustafaysr"
-                />
-              </Tilt>
-              <Tilt
-                style={{ backgroundColor: "transparent" }}
-                options={{ scale: 4, max: 45 }}
-              >
-                <CardMui
-                  title="Necati"
-                  description="Full Stack Web Developer"
-                  img={necati}
-                  github="https://github.com/necati-arslan"
-                  linkedIn="https://www.linkedin.com/in/arslannecati/"
-                />
-              </Tilt>
+                  </div>
+
+                })
+              }
+             
             </div>
           </div>
           <div className="thanks-message">

@@ -40,7 +40,7 @@ const SingleTrip = () => {
 
   useEffect(async () => {
     if (user !== null && detail) {
-      likedBy.includes(user.userId) ? setIsClicked(true) : setIsClicked(false);
+      setIsClicked(likedBy.includes(user.userId));
 
       try {
         await api.likedBy(detail._id, { likedBy: likedBy });
