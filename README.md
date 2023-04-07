@@ -1,12 +1,11 @@
-`TODO: Add a nice screenshot of the app!`
 
 # Class XX final project
 
 This is the final project for the HackYourFuture curriculum we did as a class using the MERN stack by following the agile methodology with our team and a group of mentors. A quick guide to what we built:
 
-> TODO: Add short description of the app
+This is a trip advisor app that depends on people exprience and helps user to see how other place are from opinions of people... user can login/ and create their own exprience of a place they visited.
 
-https://c40-team-monday.herokuapp.com/login 
+https://c40-team-monday.herokuapp.com
 
 ## 1. Setup
 
