@@ -1,4 +1,3 @@
-`TODO: Add a nice screenshot of the app!`
 
 # Class XX final project
 
@@ -6,7 +5,7 @@ This is the final project for the HackYourFuture curriculum we did as a class us
 
 > TODO: Add short description of the app
 
-https://c40-team-monday.herokuapp.com/login 
+https://c40-team-monday.herokuapp.com
 
 ## 1. Setup
 
