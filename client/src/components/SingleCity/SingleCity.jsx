@@ -21,7 +21,7 @@ const SingleCity = () => {
       <h1 className="top-destination top-one">Cities</h1>
       <div className="underline"></div>
       <div className="reviewContainer">
-        <FilterCategory dbData={dbData} />
+        <FilterCategory dbData={dbData}/>
       </div>
       {isLoading && <Loading />}
     </>

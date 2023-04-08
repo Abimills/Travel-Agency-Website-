@@ -5,7 +5,7 @@ import "./filterCategory.css";
 
 // eslint-disable-next-line react/prop-types
 const FilterCategory = ({ dbData }) => {
-  const [selectCat, setSelectCat] = useState([]);
+  const [selectCat, setSelectCat] = useState(0);
   const [data, setData] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -30,7 +30,7 @@ const FilterCategory = ({ dbData }) => {
         <div className="filterItem">
           <ul>
             {categories?.map((item, index) => (
-              <li key={index}>
+              <li key={item + index}>
                 <button
                   className={selectCat === index ? "active" : "non-active"}
                   onClick={() => {
@@ -46,7 +46,7 @@ const FilterCategory = ({ dbData }) => {
         </div>
         <div className="reviewCards">
           {data?.map((item) => (
-            <div className="reviewItem" key={item.id}>
+            <div className="reviewItem" key={item._id}>
               <Card
                 title={item.visitedPlace}
                 img={item.photo}
@@ -55,7 +55,11 @@ const FilterCategory = ({ dbData }) => {
                 id={item._id}
                 userName={item.userName}
                 date={item.date}
-                icon={Array(item.score).fill(<AiFillStar />)}
+                icon={Array(item.score)
+                  .fill()
+                  .map((_, index) => (
+                    <AiFillStar key={index} />
+                  ))}
               />
             </div>
           ))}

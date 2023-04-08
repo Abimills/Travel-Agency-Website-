@@ -506,6 +506,13 @@ flex-direction: column-reverse; */
   margin: 1rem;
   border: 3px dotted rgb(239, 145, 5);
 }
+.card-indiv-desc{
+  background-color: antiquewhite;
+  width:max-content;
+  padding: 5px;
+  border-radius:20px;
+  cursor: pointer;
+}
 .services-text .our-services-header {
   font-size: 3.3rem;
   margin-left: 20px;

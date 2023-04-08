@@ -22,7 +22,11 @@ const FavoritesReviews = ({ data }) => {
           id={item._id}
           date={item.date}
           userName={item.userName}
-          icon={Array(item.score).fill(<AiFillStar />)}
+          icon={Array(item.score)
+            .fill()
+            .map((_, index) => (
+              <AiFillStar key={index} />
+            ))}
         />
       ))}
     </div>

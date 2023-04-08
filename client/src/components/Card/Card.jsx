@@ -7,7 +7,7 @@ import { AiFillHeart } from "react-icons/ai";
 import { AiOutlineHeart } from "react-icons/ai";
 import { LoginContext } from "../Context/LoginContext";
 
-const Card = ({ img, title, id, icon, date }) => {
+const Card = ({ img, title, id, icon, date, description }) => {
   const { user } = useContext(LoginContext);
   const navigate = useNavigate();
   const [favored, setFavored] = useState(false);
@@ -70,12 +70,13 @@ const Card = ({ img, title, id, icon, date }) => {
         <img src={img} alt="card-image" />
 
         <div className="info-box">
-            <span className="placeName">
-              <ImLocation />
-          
-              {title}
-         
-            </span>
+          <span className="placeName">
+            <ImLocation />
+
+            {title}
+          </span>
+          <p className="card-indiv-desc">{description}</p>
+
           <div className="star-header-container">
             <div className="stars">
               <div className="star-icon">{icon}</div>
@@ -98,7 +99,7 @@ Card.propTypes = {
   icon: PropTypes.array,
   subDescription: PropTypes.string,
   userName: PropTypes.string,
-  date: PropTypes.date,
+  date: PropTypes.string,
 };
 
 export default Card;

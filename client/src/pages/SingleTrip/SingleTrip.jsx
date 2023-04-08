@@ -65,7 +65,7 @@ const SingleTrip = () => {
     }
   };
 
-  // handle comments 
+  // handle comments
   const sendInfo = async () => {
     if (user === null) {
       navigate("/login");
@@ -129,7 +129,11 @@ const SingleTrip = () => {
           <h1 className="visited-place-header">{detail?.visitedPlace}</h1>
           <div className="stars-person-info-container">
             <div className="single-page-stars-container">
-              {Array(detail?.score).fill(<AiFillStar className="fav-stars" />)}
+              {Array(detail?.score)
+                .fill()
+                .map((_, index) => (
+                  <AiFillStar key={index} className="fav-stars" />
+                ))}
             </div>
             |
             {detail?.category.map((each, index) => {

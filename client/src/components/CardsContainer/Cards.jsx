@@ -26,8 +26,13 @@ const Cards = () => {
             key={item._id}
             id={item._id}
             date={item.date}
-            userName={item.userName}
-            icon={Array(item.score).fill(<AiFillStar />)}
+            userName={item.description}
+            // icon={Array(item.score).fill(<AiFillStar />)}
+            icon={Array(item.score)
+              .fill()
+              .map((_, index) => (
+                <AiFillStar key={index} />
+              ))}
           />
         ))}
       </div>
