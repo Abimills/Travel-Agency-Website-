@@ -182,6 +182,7 @@ export const makeNewPassword = async (req, res) => {
   }
 };
 
+// verify refresh Token
 export const getAccessToken = async (req, res) => {
   const refreshToken = req.body.refreshToken;
   if (!refreshToken) return res.status(400).json({ err: "bad request" });
@@ -210,20 +211,26 @@ export const getAccessToken = async (req, res) => {
   }
 };
 
-//Profile user image
+//user update profile image
 export const handleSubmitUserImage = async (req, res) => {
   const { photoUser, userId } = req.body;
 
   try {
-    const result = await cloudinary.v2.uploader.upload(
+    const cloudinarySavedImage = await cloudinary.v2.uploader.upload(
       photoUser,
       options,
       function (error, result) {
-        logInfo(error, result);
+        if (error)
+          res.status(500).json({
+            success: false,
+            msg: "Something went up when trying to save image to cloudinary",
+            err: error,
+          });
+        return result;
       }
     );
 
-    const url = result.url;
+    const { url } = cloudinarySavedImage;
     await User.updateOne({ _id: userId }, { $set: { photoUser: url } });
     const updatedUserImage = await User.findById(userId);
 
@@ -231,7 +238,6 @@ export const handleSubmitUserImage = async (req, res) => {
       .status(200)
       .json({ success: "true", updatedPhoto: updatedUserImage.photoUser });
   } catch (err) {
-    logError(err);
     const errors = validationSchema(err);
     res.status(500).json({ success: false, errors });
   }

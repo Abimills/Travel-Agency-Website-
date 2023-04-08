@@ -20,8 +20,11 @@ app.use(express.urlencoded({ extended: false }, { limit: "50mb" }));
  * We use /api/ at the start of every route!
  * As we also host our client code on heroku we want to separate the API endpoints.
  */
+// user route
 app.use("/api/user", userRouter);
+// review route
 app.use("/api/review", reviewRouter);
+// authentication route
 app.use("/api/auth", authRouter);
 
 export default app;

@@ -10,7 +10,9 @@ import {
 } from "../controllers/auth.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
+// start our express router
 const authRouter = express.Router();
+
 // register user
 authRouter.post("/create", createUser);
 // login user
@@ -21,8 +23,9 @@ authRouter.post("/sendLink", sendLink);
 authRouter.get("/verifyUser/:id", verifyToken, verifyUser);
 // reset password
 authRouter.post("/changePassword/:id", verifyToken, makeNewPassword);
-
+// verify token  and create refresh token
 authRouter.post("/token", getAccessToken);
+// user upload profile photo
 authRouter.post("/profileImage", handleSubmitUserImage);
 
 export default authRouter;
